@@ -16,18 +16,22 @@ export class UserService {
     }
   }
 
-  public async findUserById(userId: string): Promise<HttpResponse> {
-    try {
-      const findUser: User = await this.userModel.findOne({ _id: userId });
-      return new HttpResponse(findUser);
-    } catch (error) {
-      throw new HttpException(error);
-    }
+  public async findUserByEmail(email: string, includePassword: Boolean = false): Promise<User> {
+    return includePassword ? await this.userModel.findOne({ email: email }).select('+password') : await this.userModel.findOne({ email: email });
   }
 
   public async createUser(userData: User): Promise<HttpResponse> {
     try {
-      const createUserData: User = await this.userModel.create(userData);
+      const data = {
+        email: userData.email,
+        name: userData.name || '',
+        password: userData.password,
+        address: userData.address || '',
+        phone: userData.phone || '',
+        dob: userData.dob || new Date(),
+        avatar: userData.avatar || '',
+      };
+      const createUserData: User = await this.userModel.create(data);
       return new HttpResponse(createUserData);
     } catch (error) {
       throw new HttpException(error);
@@ -36,7 +40,7 @@ export class UserService {
 
   public async updateUser(userId: string, userData: User): Promise<HttpResponse> {
     try {
-      const updateUserById: User = await this.userModel.findOneAndUpdate({ _id: userId }, { userData });
+      const updateUserById: User = await this.userModel.findByIdAndUpdate(userId, userData, { returnDocument: 'after' });
       return new HttpResponse(updateUserById);
     } catch (error) {
       throw new HttpException(error);

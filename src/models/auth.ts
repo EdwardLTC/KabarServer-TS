@@ -25,7 +25,7 @@ export class AuthModel {
     } catch (error) {}
   }
 
-  generateToken = (user: User) => {
+  public generateToken = (user: User) => {
     const token = Jwt.sign(
       {
         _id: user._id.toString(),
@@ -44,12 +44,12 @@ export class AuthModel {
     return token;
   };
 
-  verifyToken = (token: string) => {
+  public decodeToken = (token: string) => {
     const decoded = Jwt.verify(token, JWT_SECRET);
     return decoded;
   };
 
-  getInstace() {
+  getInstance() {
     return model<Auth>('Auth');
   }
 }

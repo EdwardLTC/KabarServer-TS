@@ -17,7 +17,7 @@ export class UserModel {
         },
         name: {
           type: String,
-          required: true,
+          required: false,
         },
         address: {
           type: String,
@@ -50,21 +50,22 @@ export class UserModel {
       });
     });
 
-    // Compare password
-    UserSchema.methods.comparePassword = function (password: string) {
-      return new Promise((resolve, reject) => {
-        compare(password, this.password, (err, isMatch) => {
-          if (err) return reject(err);
-          if (!isMatch) return reject(false);
-          resolve(true);
-        });
-      });
-    };
-
     try {
       model<User>('user', UserSchema);
     } catch (error) {}
   }
+
+  // compare password
+  public comparePassword = (password: string, hash: string) => {
+    return new Promise((resolve, reject) => {
+      compare(password, hash, (err, isMatch) => {
+        if (err) return reject(err);
+        if (!isMatch) return reject(false);
+        resolve(true);
+      });
+    });
+  };
+
   getInstance() {
     return model<User>('user');
   }
