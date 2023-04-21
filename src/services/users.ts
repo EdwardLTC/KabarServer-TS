@@ -1,7 +1,6 @@
-import { hash } from 'bcrypt';
 import { Service } from 'typedi';
 import { HttpException, HttpResponse } from '@/httpModals';
-import { User } from '@interfaces/users.interface';
+import { User } from '@/interfaces/users';
 import { UserModel } from '@/models/users';
 
 @Service()
@@ -28,8 +27,7 @@ export class UserService {
 
   public async createUser(userData: User): Promise<HttpResponse> {
     try {
-      const hashedPassword = await hash(userData.password, 10);
-      const createUserData: User = await this.userModel.create({ ...userData, password: hashedPassword });
+      const createUserData: User = await this.userModel.create(userData);
       return new HttpResponse(createUserData);
     } catch (error) {
       throw new HttpException(error);
@@ -38,17 +36,8 @@ export class UserService {
 
   public async updateUser(userId: string, userData: User): Promise<HttpResponse> {
     try {
-      const updateUserById: User = await this.userModel.findByIdAndUpdate(userId, { userData });
+      const updateUserById: User = await this.userModel.findOneAndUpdate({ _id: userId }, { userData });
       return new HttpResponse(updateUserById);
-    } catch (error) {
-      throw new HttpException(error);
-    }
-  }
-
-  public async deleteUser(userId: string): Promise<HttpResponse> {
-    try {
-      const deleteUserById: User = await this.userModel.findByIdAndDelete(userId);
-      return new HttpResponse(deleteUserById);
     } catch (error) {
       throw new HttpException(error);
     }
