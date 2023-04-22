@@ -5,7 +5,7 @@ import { Service } from 'typedi';
 import { UserService } from './users';
 import { UserModel } from '@/models/users';
 
-Service();
+@Service()
 export class AuthService {
   private authModel = new AuthModel();
   private userService = new UserService();
@@ -24,23 +24,28 @@ export class AuthService {
         if (!isMatch) {
           throw new HttpException({ message: 'Invalid Password', statusCode: 422 });
         } else {
-          const token = this.authModel.generateToken(user);
-          this.authModel.getInstance().create({ token, user: user._id });
-          const userLogin = await this.authModel.getInstance().findOne({ token }).populate('user');
-          return new HttpResponse({ userLogin });
+          await this.authModel.getInstance().deleteMany({ user: user._id }); //remove last token
+          const token = this.authModel.generateToken(user); //generate new token
+          await this.authModel.getInstance().create({ token, user: user._id }); //save token
+          const tokenData = await this.authModel.getInstance().findOne({ token }).populate('user');
+          return new HttpResponse({ tokenData });
         }
       } catch (error) {
-        throw new HttpException({ statusCode: 500 });
+        console.log(error);
+        throw new HttpException({ statusCode: 500, message: error.message });
       }
     }
   }
 
   public async logout(token: string): Promise<HttpResponse> {
     try {
+      if (!token) {
+        throw new HttpException({ message: 'Invalid Token', statusCode: 401 });
+      }
       await this.authModel.getInstance().deleteOne({ token });
       return new HttpResponse({ message: 'Logout successfully' });
     } catch (error) {
-      throw new HttpException({ statusCode: 500 });
+      throw new HttpException({ statusCode: 500, message: error.message });
     }
   }
 
@@ -57,7 +62,7 @@ export class AuthService {
         return decoded;
       }
     } catch (error) {
-      throw new HttpException({ statusCode: 500 });
+      throw new HttpException({ statusCode: 500, message: error.message });
     }
   }
 }

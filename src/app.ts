@@ -78,7 +78,7 @@ export class App {
     logger.info(`🚀 Initializing routes`);
     const mappedAPI = [];
     routes.forEach(route => {
-      this.app.use('/', route.router);
+      this.app.use('/api', route.router);
       route.router.stack.map(stack =>
         mappedAPI.push({
           path: `${this.host}/api${stack.route.path}`,
