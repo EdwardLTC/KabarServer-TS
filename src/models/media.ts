@@ -2,6 +2,9 @@ import { Media } from '@/interfaces/media';
 import { Schema, model } from 'mongoose';
 
 export class MediaModel {
+  save() {
+    throw new Error('Method not implemented.');
+  }
   constructor() {
     const MediaSchema: Schema = new Schema<Media>(
       {

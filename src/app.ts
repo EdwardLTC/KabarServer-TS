@@ -86,6 +86,9 @@ export class App {
         }),
       );
     });
+
+    //init static folder
+    this.app.use('/uploads', express.static('uploads'));
     console.table(mappedAPI);
   }
 
