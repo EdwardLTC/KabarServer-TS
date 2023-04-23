@@ -15,7 +15,6 @@ export class MediaRoute implements Routes {
   }
 
   private initializeRoutes() {
-    //http://localhost:3000/api/media/upload
-    this.router.post(`${this.path}/upload`, [ImageMiddleware, this.auth.checkToken], this.media.upload);
+    this.router.post(`${this.path}/upload`, [this.auth.checkToken, ImageMiddleware], this.media.upload);
   }
 }

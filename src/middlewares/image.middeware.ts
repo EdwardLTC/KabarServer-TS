@@ -7,7 +7,7 @@ import { slugify } from '@/utils/slugify';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const dir = path.resolve(`${__dirname}/../../uploads`);
+    const dir = path.resolve(`${__dirname}../../../public/uploads/`);
     //create folder if not exist
     if (!fs.existsSync(dir)) {
       return fs.mkdir(dir, err => cb(err, dir));
