@@ -14,6 +14,7 @@ import { dbConnection } from './database';
 import { Routes } from '@interfaces/routes.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import path from 'path';
 
 export class App {
   public app: express.Application;
@@ -72,6 +73,7 @@ export class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(express.static(path.join(__dirname, '../public')));
   }
 
   private initializeRoutes(routes: Routes[]) {
@@ -86,9 +88,6 @@ export class App {
         }),
       );
     });
-
-    //init static folder
-    this.app.use('/uploads', express.static('uploads'));
     console.table(mappedAPI);
   }
 
