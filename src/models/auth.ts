@@ -1,7 +1,7 @@
 import { User } from '@/interfaces/users';
 import { Auth } from '@interfaces/auth';
 import { Schema, model } from 'mongoose';
-import { JWT_SECRET } from '@/config';
+import { JWT_SECRET, jwtExpirySeconds } from '@/config';
 import Jwt from 'jsonwebtoken';
 export class AuthModel {
   constructor() {
@@ -16,10 +16,15 @@ export class AuthModel {
           ref: 'user',
           required: true,
         },
+        expiry: {
+          type: Date,
+          default: Date.now() + jwtExpirySeconds,
+          required: false,
+        },
       },
       { timestamps: true },
     );
-
+    AuthSchema.index({ expiry: 1 }, { expireAfterSeconds: 0 });
     try {
       model<Auth>('Auth', AuthSchema);
     } catch (error) {}
@@ -37,7 +42,7 @@ export class AuthModel {
       },
       JWT_SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: jwtExpirySeconds, // jwt expiry time in seconds (1 day)
         algorithm: 'HS256',
       },
     );

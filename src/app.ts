@@ -37,10 +37,10 @@ export class App {
 
   public listen() {
     this.app.listen(this.port, () => {
-      logger.info(`|=================================`);
-      logger.info(`|======= ENV: ${this.env} ========`);
-      logger.info(`|🚀 App listening on ${this.host}`);
-      logger.info(`|=================================`);
+      logger.info(`=================================`);
+      logger.info(`======= ENV: ${this.env} ========`);
+      logger.info(`🚀 App listening on ${this.host}`);
+      logger.info(`=================================`);
     });
   }
 

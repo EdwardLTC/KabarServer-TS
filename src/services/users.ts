@@ -12,7 +12,7 @@ export class UserService {
       const users: User[] = await this.userModel.find();
       return new HttpResponse(users);
     } catch (error) {
-      throw new HttpException(error);
+      throw new HttpException({ statusCode: 500 });
     }
   }
 
@@ -34,7 +34,7 @@ export class UserService {
       const createUserData: User = await this.userModel.create(data);
       return new HttpResponse(createUserData);
     } catch (error) {
-      throw new HttpException(error);
+      throw new HttpException({ statusCode: 500 });
     }
   }
 
@@ -43,7 +43,7 @@ export class UserService {
       const updateUserById: User = await this.userModel.findByIdAndUpdate(userId, userData, { returnDocument: 'after' });
       return new HttpResponse(updateUserById);
     } catch (error) {
-      throw new HttpException(error);
+      throw new HttpException({ statusCode: 500 });
     }
   }
 }

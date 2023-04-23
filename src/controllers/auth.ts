@@ -1,3 +1,4 @@
+import { HttpException } from '@/httpModals';
 import { BaseRequest } from '@/interfaces/baseRequest';
 import { AuthService } from '@/services/auth';
 import { NextFunction, Response } from 'express';
@@ -9,31 +10,40 @@ export class AuthController {
   public login = async (req: BaseRequest, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body;
+      if (!email || !password) {
+        next(new HttpException({ statusCode: 400, message: 'Missing credentials' }));
+      }
       const loginData = await this.auth.login(email, password);
       res.status(loginData.statusCode).json(loginData);
     } catch (error) {
-      next(error);
+      next(new HttpException({ statusCode: 500 }));
     }
   };
 
   public logout = async (req: BaseRequest, res: Response, next: NextFunction) => {
     try {
       const token = req.headers.authorization;
-      console.log(token);
+      if (!token) {
+        next(new HttpException({ statusCode: 401, message: 'Missing token' }));
+      }
       const logoutData = await this.auth.logout(token);
       res.status(logoutData.statusCode).json(logoutData);
     } catch (error) {
-      next(error);
+      next(new HttpException({ statusCode: 500 }));
     }
   };
 
   public checkToken = async (req: BaseRequest, res: Response, next: NextFunction) => {
     try {
       const token = this.extractToken(req);
+      if (!token) {
+        next(new HttpException({ statusCode: 401, message: 'Missing token' }));
+      }
       const checkTokenData = await this.auth.checkToken(token);
-      res.status(200).json(checkTokenData);
+      req.user = checkTokenData;
+      next();
     } catch (error) {
-      next(error);
+      next(new HttpException({ statusCode: 500 }));
     }
   };
 

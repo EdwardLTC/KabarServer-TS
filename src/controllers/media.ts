@@ -1,3 +1,4 @@
+import { HttpException } from '@/httpModals';
 import { MediaService } from '@/services/media';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
@@ -10,7 +11,7 @@ export class MediaController {
       const media = await this.media.insertMedia(req.file);
       res.status(media.statusCode).json(media);
     } catch (error) {
-      next(error);
+      next(new HttpException({ statusCode: 400, message: 'Missing file' }));
     }
   };
 }

@@ -5,6 +5,7 @@ import { UserService } from '@/services/users';
 import { HttpResponse } from '@/httpModals/httpResponse';
 import { BaseRequest } from '@/interfaces/baseRequest';
 import { hash } from 'bcrypt';
+import { HttpException } from '@/httpModals';
 
 export class UserController {
   public user = Container.get(UserService);
@@ -14,35 +15,50 @@ export class UserController {
       const findAllUsersData: HttpResponse = await this.user.findAllUser();
       res.status(findAllUsersData.statusCode).json(findAllUsersData);
     } catch (error) {
-      next(error);
+      next(new HttpException({ statusCode: 500 }));
     }
   };
 
   public createUser = async (req: BaseRequest, res: Response, next: NextFunction) => {
     try {
       const userData: User = req.body;
+      if (!userData) {
+        next(new HttpException({ statusCode: 400, message: 'No user found in request body' }));
+      }
       const createUserData: HttpResponse = await this.user.createUser(userData);
       res.status(createUserData.statusCode).json(createUserData);
     } catch (error) {
-      next(error);
+      next(new HttpException({ statusCode: 500 }));
     }
   };
 
   public updateUser = async (req: BaseRequest, res: Response, next: NextFunction) => {
     try {
       const userId: string = req.params.id;
+      if (!userId) {
+        next(new HttpException({ statusCode: 400, message: 'No user id found in request params' }));
+      }
       const userData: User = req.body;
+      if (!userData) {
+        next(new HttpException({ statusCode: 400, message: 'No user found in request body' }));
+      }
       const updateUserData: HttpResponse = await this.user.updateUser(userId, userData);
       res.status(updateUserData.statusCode).json(updateUserData);
     } catch (error) {
-      next(error);
+      next(new HttpException({ statusCode: 500 }));
     }
   };
 
   public changePassword = async (req: BaseRequest, res: Response, next: NextFunction) => {
     try {
       const userData: User = req.user;
+      if (!userData) {
+        next(new HttpException({ statusCode: 400, message: 'No user found in request body' }));
+      }
       const password: string = req.body.password;
+      if (!password) {
+        next(new HttpException({ statusCode: 400, message: 'No password found in request body' }));
+      }
       hash(password, 10, (err, hash) => {
         if (err) return next(err);
         userData.password = hash;
@@ -50,7 +66,7 @@ export class UserController {
       const updateUserData: HttpResponse = await this.user.updateUser(userData._id.toString(), userData);
       res.status(updateUserData.statusCode).json(updateUserData);
     } catch (error) {
-      next(error);
+      next(new HttpException({ statusCode: 500 }));
     }
   };
 }

@@ -43,7 +43,7 @@ export const ImageMiddleware = (req: Request, res: Response, next: NextFunction)
   upload.single('image')(req, res, (err: any) => {
     if (err instanceof multer.MulterError || err instanceof Error || err) {
       // Multer error occurred when uploading.
-      next(new HttpException({ statusCode: 400, message: err.message }));
+      next(new HttpException({ statusCode: 400, message: 'No image found in request body' }));
     }
 
     // Check if there is a file in the request body

@@ -31,8 +31,7 @@ export class AuthService {
           return new HttpResponse({ tokenData });
         }
       } catch (error) {
-        console.log(error);
-        throw new HttpException({ statusCode: 500, message: error.message });
+        throw new HttpException({ statusCode: 500 });
       }
     }
   }
@@ -45,7 +44,7 @@ export class AuthService {
       await this.authModel.getInstance().deleteOne({ token });
       return new HttpResponse({ message: 'Logout successfully' });
     } catch (error) {
-      throw new HttpException({ statusCode: 500, message: error.message });
+      throw new HttpException({ statusCode: 500 });
     }
   }
 
@@ -62,7 +61,7 @@ export class AuthService {
         return decoded;
       }
     } catch (error) {
-      throw new HttpException({ statusCode: 500, message: error.message });
+      throw new HttpException({ statusCode: 500 });
     }
   }
 }
