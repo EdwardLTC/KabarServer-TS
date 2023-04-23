@@ -21,7 +21,7 @@ export class ArticleService {
 
   public async getArticleById(id: string): Promise<HttpResponse> {
     try {
-      const article = (await this.article.findById(id)).populate({
+      const article = await this.article.findById(id).populate({
         path: 'createdBy',
         select: 'name avatar _id',
       });
@@ -42,16 +42,17 @@ export class ArticleService {
 
   public async updateArticle(id: string, articleData: Article): Promise<HttpResponse> {
     try {
-      const updateArticle = this.article.findByIdAndUpdate(id, articleData, { returnDocument: 'after' });
+      const updateArticle = await this.article.findByIdAndUpdate(id, articleData, { returnDocument: 'after', new: true });
       return new HttpResponse(updateArticle);
     } catch (error) {
+      console.log(error);
       throw new HttpException({ statusCode: 500 });
     }
   }
 
   public async deleteArticle(id: string): Promise<HttpResponse> {
     try {
-      const deleteArticle = this.article.findByIdAndDelete(id);
+      const deleteArticle = await this.article.findByIdAndDelete(id);
       return new HttpResponse(deleteArticle);
     } catch (error) {
       throw new HttpException({ statusCode: 500 });

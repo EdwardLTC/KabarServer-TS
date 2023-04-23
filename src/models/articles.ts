@@ -23,7 +23,7 @@ export class ArticleModel {
         },
         createdBy: {
           type: Schema.Types.ObjectId,
-          ref: 'User',
+          ref: 'user',
           required: true,
         },
       },

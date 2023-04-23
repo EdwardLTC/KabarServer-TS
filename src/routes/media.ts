@@ -1,3 +1,4 @@
+import { AuthController } from '@/controllers/auth';
 import { MediaController } from '@/controllers/media';
 import { Routes } from '@/interfaces/routes.interface';
 import { ImageMiddleware } from '@/middlewares/image.middeware';
@@ -7,6 +8,7 @@ export class MediaRoute implements Routes {
   public path = '/media';
   public router = Router();
   public media = new MediaController();
+  public auth = new AuthController();
 
   constructor() {
     this.initializeRoutes();
@@ -14,6 +16,6 @@ export class MediaRoute implements Routes {
 
   private initializeRoutes() {
     //http://localhost:3000/api/media/upload
-    this.router.post(`${this.path}/upload`, ImageMiddleware, this.media.upload);
+    this.router.post(`${this.path}/upload`, [ImageMiddleware, this.auth.checkToken], this.media.upload);
   }
 }

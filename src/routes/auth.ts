@@ -15,6 +15,6 @@ export class AuthRoute implements Routes {
     //http://localhost:3000/api/auth/login
     this.router.post(`${this.path}/login`, this.auth.login);
     //http://localhost:3000/api/auth/logout
-    this.router.get(`${this.path}/logout`, this.auth.logout);
+    this.router.get(`${this.path}/logout`, this.auth.checkToken, this.auth.logout);
   }
 }

@@ -62,6 +62,7 @@ export class ArticleController {
       const article = await this.article.updateArticle(id, articleReq);
       res.status(article.statusCode).json(article);
     } catch (error) {
+      console.log(error);
       next(new HttpException({ statusCode: 500 }));
     }
   };
