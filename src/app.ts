@@ -95,13 +95,20 @@ export class App {
     const options = {
       swaggerDefinition: {
         info: {
-          title: 'REST API',
+          title: 'Kabar API',
           version: '1.0.0',
           description: 'Edward',
         },
-      },
-      security: {
-        bearerAuth: [],
+        securityDefinitions: {
+          bearerAuth: {
+            type: 'apiKey',
+            name: 'x-auth-token',
+            scheme: 'bearer',
+            in: 'header',
+          },
+        },
+        host: this.host,
+        basePath: '/api',
       },
       apis: ['swagger.yaml'],
     };
