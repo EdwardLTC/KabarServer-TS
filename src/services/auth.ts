@@ -27,8 +27,8 @@ export class AuthService {
           await this.authModel.getInstance().deleteMany({ user: user._id }); //remove last token
           const token = this.authModel.generateToken(user); //generate new token
           await this.authModel.getInstance().create({ token, user: user._id }); //save token
-          const tokenData = await this.authModel.getInstance().findOne({ token }).populate('user');
-          return new HttpResponse({ tokenData });
+          const tokenData = await this.authModel.getInstance().findOne({ token }).populate('user').select('-expiry');
+          return new HttpResponse(tokenData);
         }
       } catch (error) {
         throw new HttpException({ statusCode: 500 });
@@ -61,7 +61,7 @@ export class AuthService {
         return decoded;
       }
     } catch (error) {
-      throw new HttpException({ statusCode: 500 });
+      throw new HttpException(error);
     }
   }
 }

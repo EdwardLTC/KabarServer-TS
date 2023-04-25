@@ -9,7 +9,7 @@ import { HtppError } from './httpError';
  * @exports HttpException
  */
 
-export class HttpException extends Error {
+export class HttpException {
   public error: boolean;
   public responseTimestamp: Date;
   public statusCode: number;
@@ -17,7 +17,6 @@ export class HttpException extends Error {
   public name: string;
 
   constructor(err: HtppError) {
-    super();
     let errName = 'InternalServerer';
     switch (err.statusCode) {
       case 409:

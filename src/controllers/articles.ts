@@ -13,7 +13,7 @@ export class ArticleController {
       const articles = await this.article.getArticles();
       res.status(articles.statusCode).json(articles);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
@@ -26,7 +26,7 @@ export class ArticleController {
       const article = await this.article.getArticleById(id);
       res.status(article.statusCode).json(article);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
@@ -44,7 +44,7 @@ export class ArticleController {
       const article = await this.article.createArticle(articleData);
       res.status(article.statusCode).json(article);
     } catch (error) {
-      next(new HttpException({ statusCode: 403 }));
+      next(new HttpException(error));
     }
   };
 
@@ -62,8 +62,7 @@ export class ArticleController {
       const article = await this.article.updateArticle(id, articleReq);
       res.status(article.statusCode).json(article);
     } catch (error) {
-      console.log(error);
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
@@ -76,7 +75,7 @@ export class ArticleController {
       const article = await this.article.deleteArticle(id);
       res.status(article.statusCode).json(article);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
@@ -89,7 +88,7 @@ export class ArticleController {
       const article = await this.article.getArticlesByUserId(id);
       res.status(article.statusCode).json(article);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
@@ -102,7 +101,7 @@ export class ArticleController {
       const article = await this.article.getArticlesByUserId(_id.toString());
       res.status(article.statusCode).json(article);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 }

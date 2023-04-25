@@ -16,7 +16,7 @@ export class AuthController {
       const loginData = await this.auth.login(email, password);
       res.status(loginData.statusCode).json(loginData);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
@@ -29,21 +29,21 @@ export class AuthController {
       const logoutData = await this.auth.logout(token);
       res.status(logoutData.statusCode).json(logoutData);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
   public checkToken = async (req: BaseRequest, res: Response, next: NextFunction) => {
     try {
       const token = this.extractToken(req);
-      if (!token) {
+      if (!token || token === 'null') {
         next(new HttpException({ statusCode: 401, message: 'Missing token' }));
       }
       const checkTokenData = await this.auth.checkToken(token);
       req.user = checkTokenData;
       next();
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 

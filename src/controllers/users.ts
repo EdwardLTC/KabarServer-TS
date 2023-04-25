@@ -15,7 +15,7 @@ export class UserController {
       const findAllUsersData: HttpResponse = await this.user.findAllUser();
       res.status(findAllUsersData.statusCode).json(findAllUsersData);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
@@ -28,7 +28,7 @@ export class UserController {
       const createUserData: HttpResponse = await this.user.createUser(userData);
       res.status(createUserData.statusCode).json(createUserData);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
@@ -45,7 +45,7 @@ export class UserController {
       const updateUserData: HttpResponse = await this.user.updateUser(userId, userData);
       res.status(updateUserData.statusCode).json(updateUserData);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 
@@ -66,7 +66,7 @@ export class UserController {
       const updateUserData: HttpResponse = await this.user.updateUser(userData._id.toString(), userData);
       res.status(updateUserData.statusCode).json(updateUserData);
     } catch (error) {
-      next(new HttpException({ statusCode: 500 }));
+      next(new HttpException(error));
     }
   };
 }
