@@ -48,8 +48,14 @@ export class AuthController {
   };
 
   public extractToken = (req: BaseRequest) => {
-    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      return req.headers.authorization.split(' ')[1];
+    if (req.headers.a && req.headers.authorization) {
+      const regex = new RegExp('^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$'); //JWT regex
+      const parts = req.headers.authorization.split(' ');
+      for (let i = 0; i < parts.length; i++) {
+        if (regex.test(parts[i])) {
+          return parts[i];
+        }
+      }
     } else if (req.query && req.query.token) {
       return req.query.token;
     } else if (req.cookies && req.cookies.token) {

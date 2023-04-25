@@ -102,12 +102,11 @@ export class App {
         securityDefinitions: {
           bearerAuth: {
             type: 'apiKey',
-            name: 'x-auth-token',
             scheme: 'bearer',
+            name: 'Authorization',
             in: 'header',
           },
         },
-        host: this.host,
         basePath: '/api',
       },
       apis: ['swagger.yaml'],
