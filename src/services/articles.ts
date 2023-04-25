@@ -25,7 +25,7 @@ export class ArticleService {
         path: 'createdBy',
         select: 'name avatar _id',
       });
-      return new HttpResponse(article);
+      return new HttpResponse([article]);
     } catch (error) {
       throw new HttpException({ statusCode: 500 });
     }
