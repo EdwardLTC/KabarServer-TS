@@ -48,7 +48,7 @@ export class AuthController {
   };
 
   public extractToken = (req: BaseRequest) => {
-    if (req.headers.a && req.headers.authorization) {
+    if (req.headers && req.headers.authorization) {
       const regex = new RegExp('^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$'); //JWT regex
       const parts = req.headers.authorization.split(' ');
       for (let i = 0; i < parts.length; i++) {
