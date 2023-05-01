@@ -16,7 +16,7 @@ export class UserRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.auth.checkToken, this.user.getUsers);
     this.router.post(`${this.path}`, this.user.createUser);
-    this.router.put(`${this.path}/:id`, this.auth.checkToken, this.user.updateUser);
+    this.router.put(`${this.path}`, this.auth.checkToken, this.user.updateUser);
     this.router.put(`${this.path}/change-password`, this.auth.checkToken, this.user.changePassword);
   }
 }

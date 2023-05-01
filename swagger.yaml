@@ -73,19 +73,154 @@ paths:
           description: Unauthorized
         "500":
           description: Internal Server Error
+
+  /users:
+    # GET ALL USERS
+    get:
+      tags:
+        - users
+      summary: Get all users
+      security:
+        - bearerAuth: []
+      description: Get all users
+      operationId: getAllUsers
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Get all users
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/users"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+
+    # REGISTER
+    post:
+      tags:
+        - users
+      summary: Register
+      description: Register
+      operationId: register
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Register
+          required: true
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                description: user Email
+              password:
+                type: string
+                description: user Password
+      responses:
+        "200":
+          description: Register
+          schema:
+            $ref: "#/definitions/users"
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+
+    # UPDATE
+    put:
+      tags:
+        - users
+      summary: Update
+      security:
+        - bearerAuth: []
+      description: Update
+      operationId: update
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Update
+          required: true
+          schema:
+            type: object
+            $ref: "#/definitions/users"
+      responses:
+        "200":
+          description: Update
+          schema:
+            $ref: "#/definitions/users"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+
+  # CHANGE PASSWORD
+  /users/change-password:
+    put:
+      tags:
+        - users
+      summary: Change password
+      security:
+        - bearerAuth: []
+      description: Change password
+      operationId: Change password
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        in: body
+        name: body
+        description: Change password
+        required: true
+        schema:
+          type: object
+          required:
+            - password
+          properties:
+            password:
+              type: string
+              description: user New Password
+      responses:
+        "200":
+          description: Change password
+          schema:
+            $ref: "#/definitions/users"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+
   
 definitions:
   users:
     type: object
     required: -email
-      -password
+      -name
+      -address
+      -phone
+      -dob
+      -avatar
+      -id
     properties:
       email:
         type: string
         description: user Email
-      password:
-        type: string
-        description: user Password
       name:
         type: string
         description: user Name
@@ -101,6 +236,9 @@ definitions:
       avatar:
         type: string
         description: user Avatar
+      id:
+        type: string
+        description: user ID
 
   authentication:
     type: object
@@ -120,6 +258,8 @@ definitions:
     required: -title
       -content
       -image
+      -createdAt
+      -createdBy
     properties:
       title:
         type: string
@@ -130,3 +270,10 @@ definitions:
       image:
         type: string
         description: article image
+      createdAt:
+        type: Date
+        description: article created at
+      createdBy:
+        type: object
+        description: article created by
+        $ref: "#/definitions/users"

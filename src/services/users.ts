@@ -43,6 +43,7 @@ export class UserService {
       const updateUserById: User = await this.userModel.findByIdAndUpdate(userId, userData, { returnDocument: 'after' });
       return new HttpResponse(updateUserById);
     } catch (error) {
+      console.log(error);
       throw new HttpException({ statusCode: 500 });
     }
   }

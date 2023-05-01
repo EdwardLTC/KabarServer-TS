@@ -34,9 +34,9 @@ export class UserController {
 
   public updateUser = async (req: BaseRequest, res: Response, next: NextFunction) => {
     try {
-      const userId: string = req.params.id;
+      const userId = req.user._id.toString();
       if (!userId) {
-        next(new HttpException({ statusCode: 400, message: 'No user id found in request params' }));
+        next(new HttpException({ statusCode: 401, message: 'Missing token' }));
       }
       const userData: User = req.body;
       if (!userData) {
