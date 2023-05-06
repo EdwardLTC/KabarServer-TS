@@ -1,9 +1,10 @@
 import { User } from '@/interfaces/users';
 import { Auth } from '@interfaces/auth';
-import { Schema, model } from 'mongoose';
+import { Model, Schema, model } from 'mongoose';
 import { JWT_SECRET, jwtExpirySeconds } from '@/config';
 import Jwt from 'jsonwebtoken';
 export class AuthModel {
+  private static instance: Model<Auth>;
   constructor() {
     const AuthSchema: Schema = new Schema<Auth>(
       {
@@ -55,6 +56,9 @@ export class AuthModel {
   };
 
   getInstance() {
-    return model<Auth>('Auth');
+    if (!AuthModel.instance) {
+      AuthModel.instance = model<Auth>('Auth');
+    }
+    return AuthModel.instance;
   }
 }

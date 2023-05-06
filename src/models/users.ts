@@ -1,7 +1,8 @@
-import { model, Schema } from 'mongoose';
+import { Model, model, Schema } from 'mongoose';
 import { User } from '@/interfaces/users';
 import { hash, compare } from 'bcrypt';
 export class UserModel {
+  private static instance: Model<User>;
   constructor() {
     const UserSchema: Schema = new Schema<User>(
       {
@@ -67,6 +68,9 @@ export class UserModel {
   };
 
   getInstance() {
-    return model<User>('user');
+    if (!UserModel.instance) {
+      UserModel.instance = model<User>('user');
+    }
+    return UserModel.instance;
   }
 }

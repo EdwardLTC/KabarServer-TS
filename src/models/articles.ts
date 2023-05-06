@@ -1,7 +1,8 @@
 import { Article } from '@/interfaces/articles';
-import { Schema, model } from 'mongoose';
+import { Model, Schema, model } from 'mongoose';
 
 export class ArticleModel {
+  private static instance: Model<Article>;
   constructor() {
     const ArticleSchema: Schema = new Schema<Article>(
       {
@@ -36,6 +37,10 @@ export class ArticleModel {
   }
 
   getInstance() {
-    return model<Article>('article');
+    if (!ArticleModel.instance) {
+      ArticleModel.instance = model<Article>('article');
+    }
+
+    return ArticleModel.instance;
   }
 }

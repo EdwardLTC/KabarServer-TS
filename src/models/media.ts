@@ -1,10 +1,8 @@
 import { Media } from '@/interfaces/media';
-import { Schema, model } from 'mongoose';
+import { Model, Schema, model } from 'mongoose';
 
 export class MediaModel {
-  save() {
-    throw new Error('Method not implemented.');
-  }
+  private static instance: Model<Media>;
   constructor() {
     const MediaSchema: Schema = new Schema<Media>(
       {
@@ -42,6 +40,9 @@ export class MediaModel {
   }
 
   getInstance() {
-    return model<Media>('media');
+    if (!MediaModel.instance) {
+      MediaModel.instance = model<Media>('media');
+    }
+    return MediaModel.instance;
   }
 }
